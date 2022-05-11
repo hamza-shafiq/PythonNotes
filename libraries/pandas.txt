@@ -1,0 +1,65 @@
+import pandas as pd
+
+## Read files
+df = pd.read_csv(“filename.csv”)
+df = pd.read_excel(“filename.xlsx”)
+df = pd.read_csv(“filename.txt”, delimiter=“\t”)
+
+
+## Read Headers
+cols = list(df.columns)
+
+
+## Read each column
+print(df[[“Name”, “HP”]][0:5])
+
+
+## Read each row
+print(df.head(5))
+print(df.iloc[0:4])
+
+
+## Read specific location
+print(df.iloc[2, 1])
+
+## Iterate row by row
+For index, row in df.iterrows():
+	print(index, row[“Name”])
+
+
+## Filtering Data
+new_df = df.loc[ (df[“Name”] == “Alpha”) & (df[“HP”] > 50) ]
+new_df = new_df.reset_index(drop=True, inplace=True)
+
+
+## Sorting
+df.sort_values([“Name”, “HP”], ascending=True)
+
+
+## Drop column
+df = df.drop(column=[“Total”])
+
+
+## Saving file
+df.to_csv(“new_filename.csv”, index=False)
+df.to_csv(“new_filename.txt”, index=False, sep=“”\t)
+
+
+## Contains function
+import re
+df.loc[ ~df[“Name”].str.contains(“Alpha”) ]
+df.loc[ ~df[“Name”].str.contains(“alpha|beta”, flags=re.I, regex=True) ]
+df.loc[ ~df[“Name”].str.contains(“^ab[a-z]*”, flags=re.I, regex=True) ]
+
+
+## Groupby
+df.groupby( [“Name”] ).mean().sort_values(“HP”)
+df.groupby( [“Name”] ).count()
+
+
+## Large dataset - Read in chunks
+For df in pd.read_csv(“”filename.csv, chunksize=5)
+	print(df)
+
+
+
